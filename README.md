@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-# PaperTrail – Prototype
+# PaperTrail 
 
 A first working prototype: an HTML/JS frontend that talks to a Flask backend.
 

@@ -13,7 +13,7 @@ frontend pages  ──fetch──►  Flask API (localhost:5001)
                                              POST /upload      → saves PDF, creates job
                                              GET  /jobs        → list of uploads
                                              GET  /status/<id> → one job
-                                             POST /ask         → placeholder (not built yet)
+                                             POST /ask         → placeholder 
 ```
 
 ## Run it (Mac)

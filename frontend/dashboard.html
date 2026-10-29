@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | PaperTrail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app" id="app" hidden>
+    <!-- ===== Sidebar ===== -->
+    <aside class="sidebar">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24" class="icon"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6M8 13h8M8 17h5"/></svg>
+        </span>
+        <span class="brand-name">PaperTrail</span>
+      </a>
+
+      <nav class="side-nav">
+        <a class="active" href="#documents">
+          <svg viewBox="0 0 24 24" class="icon"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+          My documents
+        </a>
+        <a href="#ask">
+          <svg viewBox="0 0 24 24" class="icon"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Ask a question
+        </a>
+      </nav>
+
+      <div class="side-user">
+        <div class="who">
+          <span class="avatar" id="avatar">A</span>
+          <div>
+            <strong id="full-name">Ali Rizvi</strong>
+            <small id="contact"></small>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-small" id="logout-btn" type="button">Log out</button>
+      </div>
+    </aside>
+
+    <!-- ===== Main area ===== -->
+    <main class="main">
+      <div class="main-head">
+        <div>
+          <h1 id="greeting">Hello</h1>
+          <p id="today"></p>
+        </div>
+        <span class="server-pill" id="server-pill"><span class="dot"></span><span class="label">Checking server…</span></span>
+      </div>
+
+      <div class="summary">
+        <div class="summary-card"><span>Documents</span><strong id="sum-docs">0</strong></div>
+        <div class="summary-card"><span>Total uploaded</span><strong id="sum-size">0 B</strong></div>
+        <div class="summary-card"><span>Waiting to be processed</span><strong id="sum-queued">0</strong></div>
+      </div>
+
+      <div class="work">
+        <section class="card" id="documents">
+          <h2>
+            <svg viewBox="0 0 24 24" class="icon"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg>
+            Upload a PDF
+          </h2>
+          <label class="dropzone" id="dropzone">
+            <input id="file-input" type="file" accept="application/pdf" hidden />
+            <svg viewBox="0 0 24 24" class="icon"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6M12 18v-6M9 15l3-3 3 3"/></svg>
+            <strong>Drop a PDF here</strong>
+            <span>or click to choose a file · max 20 MB</span>
+          </label>
+          <p class="message" id="upload-message" role="status"></p>
+
+          <ul class="doc-list" id="doc-list"><li class="empty">No documents yet.</li></ul>
+        </section>
+
+        <section class="card ask-card" id="ask">
+          <h2>
+            <svg viewBox="0 0 24 24" class="icon"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Ask a question
+          </h2>
+          <div class="chat-log" id="chat-log">
+            <div class="bubble bot">
+              Upload a PDF, then ask me anything about it.
+              <em>Answers are coming soon. Questions can already be sent.</em>
+            </div>
+          </div>
+          <form class="ask-form" id="ask-form">
+            <input id="question" type="text" placeholder="e.g. What is the main conclusion?" autocomplete="off" />
+            <button class="btn btn-primary" type="submit">Send</button>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

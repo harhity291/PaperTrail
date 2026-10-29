@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register | PaperTrail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="auth-page">
+  <header class="auth-top">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6M8 13h8M8 17h5"/></svg>
+      </span>
+      <span class="brand-name">PaperTrail</span>
+    </a>
+    <a class="back-link" href="index.html">← Back to home</a>
+  </header>
+
+  <main class="auth-main">
+    <div class="auth-card wide">
+      <a class="auth-close" href="index.html" aria-label="Close">✕</a>
+
+      <span class="auth-icon">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM19 8v6M22 11h-6"/></svg>
+      </span>
+      <h1 class="auth-title">Create your <span>account</span></h1>
+      <p class="auth-sub">It only takes a minute to get started.</p>
+
+      <form class="auth-form" id="register-form" novalidate>
+        <div class="row">
+          <label>First name
+            <input id="first-name" type="text" autocomplete="given-name" placeholder="Enter your name" />
+          </label>
+          <label>Last name
+            <input id="last-name" type="text" autocomplete="family-name" placeholder="Enter your surname" />
+          </label>
+        </div>
+        <label>Email address
+          <input id="email" type="email" autocomplete="email" placeholder="Enter your email address" />
+          <span class="hint">You need an email or a phone number (or both).</span>
+        </label>
+        <label>Phone number
+          <input id="phone" type="tel" autocomplete="tel" placeholder="+353 8X XXX XXXX or +91 XXXXXXXXXX" />
+        </label>
+        <label>Password
+          <span class="pw-wrap">
+            <input id="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" />
+            <button class="pw-toggle" type="button" data-toggle="password" aria-label="Show password">
+              <svg viewBox="0 0 24 24" class="icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </span>
+        </label>
+        <p class="message" id="form-message" role="alert"></p>
+        <button class="auth-submit" type="submit">Create account</button>
+      </form>
+
+      <p class="auth-switch">Already registered? <a href="login.html">Log in instead</a></p>
+    </div>
+  </main>
+
+  <script src="js/common.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

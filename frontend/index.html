@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PaperTrail | Your study papers in one place</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6M8 13h8M8 17h5"/></svg>
+      </span>
+      <span class="brand-name">PaperTrail</span>
+    </a>
+    <nav class="header-links" id="guest-links">
+      <a class="plain-link" href="login.html">Log in</a>
+      <a class="btn btn-primary btn-small" href="register.html">Register</a>
+    </nav>
+    <nav class="header-links" id="member-links" hidden>
+      <a class="btn btn-primary btn-small" href="dashboard.html">Open my dashboard</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <span class="eyebrow">For students and study groups</span>
+        <h1>Keep every paper.<br /><span>Find any answer.</span></h1>
+        <p class="hero-text">
+          PaperTrail is one place for your lecture notes, papers and reports.
+          Upload a PDF, keep track of it, and ask questions about what is inside.
+        </p>
+        <div class="hero-buttons">
+          <a class="btn btn-primary" href="register.html">Create an account</a>
+          <a class="btn btn-ghost" href="login.html">
+            I already have one
+            <svg viewBox="0 0 24 24" class="icon"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <ul class="check-list">
+          <li><svg viewBox="0 0 24 24" class="icon"><path d="M20 6L9 17l-5-5"/></svg>Drag-and-drop PDF uploads up to 20 MB</li>
+          <li><svg viewBox="0 0 24 24" class="icon"><path d="M20 6L9 17l-5-5"/></svg>Your documents are only visible to you</li>
+          <li><svg viewBox="0 0 24 24" class="icon"><path d="M20 6L9 17l-5-5"/></svg>Works in any browser, nothing to install</li>
+        </ul>
+      </div>
+
+      <!-- Decorative stack of papers -->
+      <div class="paper-stack" aria-hidden="true">
+        <div class="paper back"></div>
+        <div class="paper middle"></div>
+        <div class="paper front">
+          <div class="paper-head"><span class="file-badge">PDF</span><strong>Week-5-notes.pdf</strong></div>
+          <div class="line w90"></div>
+          <div class="line w75"></div>
+          <div class="line mark w80"></div>
+          <div class="line w60"></div>
+          <div class="line w90"></div>
+          <div class="line mark w60"></div>
+          <div class="line w75"></div>
+          <div class="line w80"></div>
+          <div class="line w60"></div>
+        </div>
+        <div class="question-chip">
+          <svg viewBox="0 0 24 24" class="icon"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          What is covered in week 5?
+        </div>
+      </div>
+    </section>
+
+    <section class="how">
+      <h2>How PaperTrail works</h2>
+      <p>Three steps from a messy downloads folder to answers.</p>
+      <div class="timeline">
+        <div class="t-step">
+          <span class="t-dot">1</span>
+          <h3>Upload your PDF</h3>
+          <p>Drop in notes, slides or a paper. Each file is saved to your account.</p>
+        </div>
+        <div class="t-step">
+          <span class="t-dot">2</span>
+          <h3>We process it</h3>
+          <p>The text is read and organised so the right parts can be found later.</p>
+        </div>
+        <div class="t-step">
+          <span class="t-dot">3</span>
+          <h3>Ask questions</h3>
+          <p>Type a question and get an answer based on your own document.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-band">
+      <div>
+        <h3>A CS6422 team project</h3>
+        <p>Built by Team Tech Titan at University College Cork.</p>
+      </div>
+      <a class="btn btn-primary" href="register.html">Try it now</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">PaperTrail prototype · Team Tech Titan · CS6422</footer>
+
+  <script src="js/common.js"></script>
+  <script>
+    // If already logged in, show a dashboard button instead of Log in / Register
+    if (getToken()) {
+      document.getElementById("guest-links").hidden = true;
+      document.getElementById("member-links").hidden = false;
+    }
+  </script>
+</body>
+</html>

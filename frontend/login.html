@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log in | PaperTrail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="auth-page">
+  <header class="auth-top">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6M8 13h8M8 17h5"/></svg>
+      </span>
+      <span class="brand-name">PaperTrail</span>
+    </a>
+    <a class="back-link" href="index.html">← Back to home</a>
+  </header>
+
+  <main class="auth-main">
+    <div class="auth-card">
+      <a class="auth-close" href="index.html" aria-label="Close">✕</a>
+
+      <span class="auth-icon">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M10 17l5-5-5-5M15 12H3M14 3h5a2 2 0 012 2v14a2 2 0 01-2 2h-5"/></svg>
+      </span>
+      <h1 class="auth-title">Welcome <span>back</span></h1>
+      <p class="auth-sub">Log in to pick up where you left off.</p>
+
+      <form class="auth-form" id="login-form" novalidate>
+        <label>Email or phone number
+          <input id="identifier" type="text" autocomplete="username" placeholder="you@example.com or +353 8X XXX XXXX" />
+        </label>
+        <label>Password
+          <span class="pw-wrap">
+            <input id="password" type="password" autocomplete="current-password" placeholder="Enter your password" />
+            <button class="pw-toggle" type="button" data-toggle="password" aria-label="Show password">
+              <svg viewBox="0 0 24 24" class="icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </span>
+        </label>
+        <p class="message" id="form-message" role="alert"></p>
+        <button class="auth-submit" type="submit">Log in</button>
+      </form>
+
+      <p class="auth-switch">Don’t have an account? <a href="register.html">Register here</a></p>
+    </div>
+  </main>
+
+  <script src="js/common.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

@@ -84,3 +84,6 @@ An AI-powered PDF chatbot using Retrieval-Augmented Generation (RAG) and Large L
                  └───────────────────────────────────────────────────┘
 
 >>>>>>> e17766c1bf53d946af2061331c8f7252df7932e2
+
+
+Backend: Ali Earaj Rizvi

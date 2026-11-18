@@ -15,7 +15,7 @@ function setToken(value) {
 }
 
 // ---------- Calling the backend ----------
-// Adds the token to every request, and sends you to the login page if it has expired.
+// Adds the token to every request, and opens the login popup if it has expired.
 async function api(path, options = {}) {
   const headers = { ...(options.headers || {}) };
   const token = getToken();
@@ -24,7 +24,7 @@ async function api(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
   if (res.status === 401 && token && !path.startsWith("/auth/login")) {
     setToken(null);
-    window.location.href = "login.html?expired=1";
+    window.location.href = "index.html?login=1&expired=1";
   }
   return res;
 }
@@ -42,7 +42,7 @@ async function postJson(path, body) {
 // On the dashboard: make sure someone is logged in, and return their details.
 async function requireLogin() {
   if (!getToken()) {
-    window.location.href = "login.html";
+    window.location.href = "index.html?login=1";
     return null;
   }
   try {
@@ -50,8 +50,8 @@ async function requireLogin() {
     if (!res.ok) return null;
     return await res.json();
   } catch (err) {
-    // Backend is not running: go to the login page, which shows a clear message
-    window.location.href = "login.html?offline=1";
+    // Backend is not running: open the login popup, which shows a clear message
+    window.location.href = "index.html?login=1&offline=1";
     return null;
   }
 }

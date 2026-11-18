@@ -345,3 +345,31 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
   .auth-form .row { grid-template-columns: 1fr; }
   .who small { display: none; }
 }
+
+/* ---------- Log in / Create account popup on the home page ---------- */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  display: grid; place-items: center; padding: 20px 16px;
+  background: rgba(8, 10, 28, 0.72); backdrop-filter: blur(6px);
+  animation: fade 0.2s ease;
+}
+.modal-overlay[hidden] { display: none; }
+.modal-card { max-height: calc(100vh - 40px); overflow-y: auto; padding-top: 58px; }
+button.auth-close { border: none; background: none; cursor: pointer; }
+body.modal-open { overflow: hidden; }
+
+.auth-tabs {
+  display: flex; gap: 4px; padding: 4px; margin: 0 0 24px;
+  border-radius: 12px; border: 1px solid var(--border); background: rgba(10, 13, 34, 0.6);
+}
+.auth-tab {
+  flex: 1; padding: 10px 12px; border: none; border-radius: 9px; background: none;
+  color: var(--muted); font: 600 14px "Inter", sans-serif; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.auth-tab:hover { color: var(--text); }
+.auth-tab[aria-selected="true"] { background: var(--amber-soft); color: var(--amber); box-shadow: inset 0 0 0 1px var(--amber); }
+.auth-panel { animation: fade 0.2s ease; }
+.auth-panel .auth-title { margin-top: 0; }
+
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }

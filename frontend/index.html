@@ -17,8 +17,8 @@
       <span class="brand-name">PaperTrail</span>
     </a>
     <nav class="header-links" id="guest-links">
-      <a class="plain-link" href="login.html">Log in</a>
-      <a class="btn btn-primary btn-small" href="register.html">Register</a>
+      <a class="plain-link" href="index.html?login=1" data-open-auth="login">Log in</a>
+      <a class="btn btn-primary btn-small" href="index.html?signup=1" data-open-auth="register">Get started</a>
     </nav>
     <nav class="header-links" id="member-links" hidden>
       <a class="btn btn-primary btn-small" href="dashboard.html">Open my dashboard</a>
@@ -35,9 +35,9 @@
           Upload a PDF, keep track of it, and ask questions about what is inside.
         </p>
         <div class="hero-buttons">
-          <a class="btn btn-primary" href="register.html">Create an account</a>
-          <a class="btn btn-ghost" href="login.html">
-            I already have one
+          <a class="btn btn-primary" href="index.html?signup=1" data-open-auth="register">Get started</a>
+          <a class="btn btn-ghost" href="index.html?login=1" data-open-auth="login">
+            I already have an account
             <svg viewBox="0 0 24 24" class="icon"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
@@ -98,15 +98,88 @@
         <h3>A CS6422 team project</h3>
         <p>Built by Team Tech Titan at University College Cork.</p>
       </div>
-      <a class="btn btn-primary" href="register.html">Try it now</a>
+      <a class="btn btn-primary" href="index.html?signup=1" data-open-auth="register">Try it now</a>
     </section>
   </main>
 
   <footer class="site-footer">PaperTrail prototype · Team Tech Titan · CS6422</footer>
 
+  <!-- ===== Log in / Create account popup (opens on top of the home page) ===== -->
+  <div class="modal-overlay" id="auth-modal" hidden>
+    <div class="auth-card wide modal-card" role="dialog" aria-modal="true" aria-label="Log in or create an account">
+      <button class="auth-close" type="button" id="auth-close" aria-label="Close">✕</button>
+
+      <div class="auth-tabs" role="tablist">
+        <button class="auth-tab" type="button" role="tab" id="tab-login" data-tab="login" aria-controls="panel-login">Log in</button>
+        <button class="auth-tab" type="button" role="tab" id="tab-register" data-tab="register" aria-controls="panel-register">Create account</button>
+      </div>
+
+      <!-- Log in -->
+      <section class="auth-panel" id="panel-login" role="tabpanel" aria-labelledby="tab-login">
+        <h1 class="auth-title">Welcome <span>back</span></h1>
+        <p class="auth-sub">Log in to pick up where you left off.</p>
+
+        <form class="auth-form" id="login-form" novalidate>
+          <label>Email or phone number
+            <input id="identifier" type="text" autocomplete="username" placeholder="you@example.com or +353 8X XXX XXXX" />
+          </label>
+          <label>Password
+            <span class="pw-wrap">
+              <input id="login-password" type="password" autocomplete="current-password" placeholder="Enter your password" />
+              <button class="pw-toggle" type="button" data-toggle="login-password" aria-label="Show password">
+                <svg viewBox="0 0 24 24" class="icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </span>
+          </label>
+          <p class="message" role="alert"></p>
+          <button class="auth-submit" type="submit">Log in</button>
+        </form>
+
+        <p class="auth-switch">Don’t have an account? <a href="index.html?signup=1" data-switch-tab="register">Create one</a></p>
+      </section>
+
+      <!-- Create account -->
+      <section class="auth-panel" id="panel-register" role="tabpanel" aria-labelledby="tab-register" hidden>
+        <h1 class="auth-title">Create your <span>account</span></h1>
+        <p class="auth-sub">It only takes a minute to get started.</p>
+
+        <form class="auth-form" id="register-form" novalidate>
+          <div class="row">
+            <label>First name
+              <input id="first-name" type="text" autocomplete="given-name" placeholder="Enter your name" />
+            </label>
+            <label>Last name
+              <input id="last-name" type="text" autocomplete="family-name" placeholder="Enter your surname" />
+            </label>
+          </div>
+          <label>Email address
+            <input id="email" type="email" autocomplete="email" placeholder="Enter your email address" />
+            <span class="hint">You need an email or a phone number (or both).</span>
+          </label>
+          <label>Phone number
+            <input id="phone" type="tel" autocomplete="tel" placeholder="+353 8X XXX XXXX or +91 XXXXXXXXXX" />
+          </label>
+          <label>Password
+            <span class="pw-wrap">
+              <input id="register-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" />
+              <button class="pw-toggle" type="button" data-toggle="register-password" aria-label="Show password">
+                <svg viewBox="0 0 24 24" class="icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </span>
+          </label>
+          <p class="message" role="alert"></p>
+          <button class="auth-submit" type="submit">Create account</button>
+        </form>
+
+        <p class="auth-switch">Already registered? <a href="index.html?login=1" data-switch-tab="login">Log in instead</a></p>
+      </section>
+    </div>
+  </div>
+
   <script src="js/common.js"></script>
+  <script src="js/auth.js"></script>
   <script>
-    // If already logged in, show a dashboard button instead of Log in / Register
+    // If already logged in, show a dashboard button instead of Log in / Get started
     if (getToken()) {
       document.getElementById("guest-links").hidden = true;
       document.getElementById("member-links").hidden = false;

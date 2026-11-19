@@ -345,3 +345,33 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
   .auth-form .row { grid-template-columns: 1fr; }
   .who small { display: none; }
 }
+
+/* =========================================================
+   Document chat (select a document, read answers)
+   ========================================================= */
+.doc-list li.doc-item { cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.doc-list li.doc-item:hover { border-color: var(--amber); }
+.doc-list li.doc-item:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.doc-list li.doc-item.selected { border-color: var(--amber); background: var(--amber-soft); }
+.doc-error { display: block; color: var(--danger) !important; margin-top: 2px; white-space: normal; }
+.status.processing, .status.queued { background: var(--amber-soft); color: var(--amber); }
+.status.done { background: var(--teal-soft); color: var(--teal); }
+.status.failed { background: rgba(255, 107, 107, 0.14); color: var(--danger); }
+.doc-delete {
+  border: none; background: none; color: var(--muted); font-size: 20px; line-height: 1;
+  cursor: pointer; padding: 2px 8px; border-radius: 6px;
+}
+.doc-delete:hover, .doc-delete:focus-visible { color: var(--danger); }
+
+.ask-target { margin: -6px 0 12px; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bubble.bot { white-space: pre-wrap; }
+.bubble.pending { color: var(--muted); }
+.bubble.error { color: var(--danger); }
+.bubble details.sources { margin-top: 10px; font-size: 12px; color: var(--muted); white-space: normal; }
+.bubble details.sources summary { cursor: pointer; }
+.bubble details.sources div {
+  margin-top: 8px; padding: 8px 10px; border-left: 3px solid var(--amber);
+  background: var(--bg-soft); border-radius: 0 6px 6px 0; white-space: pre-wrap;
+}
+.bubble details.sources div strong { display: block; color: var(--text); margin-bottom: 2px; }
+.ask-form input:disabled, .ask-form .btn:disabled { opacity: 0.55; cursor: not-allowed; }

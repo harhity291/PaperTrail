@@ -80,15 +80,11 @@
             <svg viewBox="0 0 24 24" class="icon"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
             Ask a question
           </h2>
-          <div class="chat-log" id="chat-log">
-            <div class="bubble bot">
-              Upload a PDF, then ask me anything about it.
-              <em>Answers are coming soon. Questions can already be sent.</em>
-            </div>
-          </div>
+          <p class="ask-target" id="ask-target">No document selected</p>
+          <div class="chat-log" id="chat-log"></div>
           <form class="ask-form" id="ask-form">
-            <input id="question" type="text" placeholder="e.g. What is the main conclusion?" autocomplete="off" />
-            <button class="btn btn-primary" type="submit">Send</button>
+            <input id="question" type="text" placeholder="Select a document first" disabled autocomplete="off" />
+            <button class="btn btn-primary" id="send-btn" type="submit" disabled>Send</button>
           </form>
         </section>
       </div>

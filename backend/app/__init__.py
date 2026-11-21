@@ -10,19 +10,22 @@ def create_app(config=None):
     # Where uploaded PDFs are saved (backend/data/uploads by default)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     app.config["UPLOAD_FOLDER"] = os.path.join(base_dir, "data", "uploads")
+    app.config["CHUNKS_FOLDER"] = os.path.join(base_dir, "data", "chunks")
+    app.config["INGEST_SYNC"] = False  # True = read the PDF inside the upload request (used by tests)
     app.config["MAX_CONTENT_LENGTH"] = 20 * 1024 * 1024  # 20 MB limit per upload
 
     if config:
         app.config.update(config)
 
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+    os.makedirs(app.config["CHUNKS_FOLDER"], exist_ok=True)
 
     # CORS: let the frontend (opened from another origin) call this API.
     # For the prototype we allow any origin; restrict this before deploying.
     @app.after_request
     def add_cors_headers(response):
         response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, DELETE, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         return response
 

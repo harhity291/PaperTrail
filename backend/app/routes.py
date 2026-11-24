@@ -178,9 +178,9 @@ def ask():
         return jsonify({"error": "This document's text is missing. Please upload it again."}), 409
     try:
         result = rag.answer(question, chunks, history)
-    except rag.LLMError:
-        current_app.logger.exception("LLM call failed")
-        return jsonify({"error": "The AI service didn't respond. Please try again in a moment."}), 502
+    except rag.LLMError as err:
+        current_app.logger.warning("LLM call failed: %s", err)
+        return jsonify({"error": str(err)}), 502
 
     return jsonify({"question": question, **result})
 

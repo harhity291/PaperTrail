@@ -165,8 +165,7 @@ def test_call_llm_uses_openai_compatible_api(monkeypatch):
     calls = {}
 
     class FakeResponse:
-        def raise_for_status(self):
-            pass
+        status_code = 200
 
         def json(self):
             return {"choices": [{"message": {"content": "  An answer.  "}}]}
@@ -193,3 +192,25 @@ def test_call_llm_turns_network_errors_into_llm_error(monkeypatch):
     monkeypatch.setattr(requests, "post", broken_post)
     with pytest.raises(rag.LLMError):
         rag.call_llm([{"role": "user", "content": "hi"}])
+
+
+def test_call_llm_explains_a_rejected_key(monkeypatch):
+    import requests
+
+    monkeypatch.setenv("LLM_BASE_URL", "https://llm.example.com/v1")
+    monkeypatch.setenv("LLM_API_KEY", "wrong-key")
+    monkeypatch.setenv("LLM_MODEL", "test-model")
+
+    class Rejected:
+        status_code = 401
+        text = '{"error": {"message": "Invalid API Key"}}'
+
+        def json(self):
+            return {"error": {"message": "Invalid API Key"}}
+
+    monkeypatch.setattr(requests, "post", lambda *a, **k: Rejected())
+    with pytest.raises(rag.LLMError) as err:
+        rag.call_llm([{"role": "user", "content": "hi"}])
+    assert "rejected the API key" in str(err.value)
+    assert "Invalid API Key" in str(err.value)
+    assert "wrong-key" not in str(err.value)

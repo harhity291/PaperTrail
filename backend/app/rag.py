@@ -195,20 +195,44 @@ def call_llm(messages):
     import requests
 
     settings = llm_settings()
+    base_url = settings["base_url"]
     headers = {"Content-Type": "application/json"}
     if settings["api_key"]:
-        headers["Authorization"] = f"Bearer {settings['api_key']}"
+        headers["Authorization"] = f"Bearer {settings['api_key'].strip()}"
     try:
         res = requests.post(
-            f"{settings['base_url']}/chat/completions",
+            f"{base_url}/chat/completions",
             headers=headers,
             json={"model": settings["model"], "messages": messages, "temperature": 0.2},
             timeout=60,
         )
-        res.raise_for_status()
+    except requests.Timeout as err:
+        raise LLMError(f"The AI service at {base_url} took longer than 60 seconds to answer.") from err
+    except requests.RequestException as err:
+        raise LLMError(f"Could not reach the AI service at {base_url}. Check LLM_BASE_URL and your internet.") from err
+
+    if res.status_code != 200:
+        # Show the provider's own reason, e.g. "Invalid API Key" (never the key itself)
+        try:
+            detail = res.json().get("error", res.text)
+            if isinstance(detail, dict):
+                detail = detail.get("message", str(detail))
+        except (ValueError, AttributeError):
+            detail = res.text
+        detail = str(detail).strip()[:300]
+        if res.status_code in (401, 403):
+            raise LLMError(f"The AI service at {base_url} rejected the API key ({res.status_code}): {detail}. "
+                           "Check that LLM_API_KEY, LLM_BASE_URL and LLM_MODEL in backend/.env are all for the same provider.")
+        if res.status_code == 404:
+            raise LLMError(f"Model '{settings['model']}' or the URL was not found at {base_url} (404): {detail}")
+        if res.status_code == 429:
+            raise LLMError(f"Out of credits or too many requests (429): {detail}")
+        raise LLMError(f"The AI service at {base_url} returned an error ({res.status_code}): {detail}")
+
+    try:
         return res.json()["choices"][0]["message"]["content"].strip()
-    except (requests.RequestException, KeyError, IndexError, ValueError) as err:
-        raise LLMError(str(err)) from err
+    except (KeyError, IndexError, ValueError, TypeError, AttributeError) as err:
+        raise LLMError("The AI service sent back a reply in an unexpected format.") from err
 
 
 def format_passages(chunks):

@@ -261,7 +261,7 @@ def test_llm_failure_returns_502(client, monkeypatch):
     doc_id = upload(client, headers, name="report.pdf", content=REPORT).get_json()["doc_id"]
     res = client.post("/ask", json={"doc_id": doc_id, "question": "revenue"}, headers=headers)
     assert res.status_code == 502
-    assert res.get_json()["error"]
+    assert res.get_json()["error"] == "timeout"   # the real reason reaches the chat
 
 
 def test_cannot_ask_about_someone_elses_document(client):

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # PaperTrail 
 
 A first working prototype: an HTML/JS frontend that talks to a Flask backend.
@@ -61,7 +60,6 @@ Port 5001 is used because macOS AirPlay Receiver already uses port 5000.
 - Redis job queue + worker process
 - Extract text with pdfplumber, split into chunks
 - Search inside documents, then real answers from `/ask`
-=======
 # PaperTrail
 An AI-powered PDF chatbot using Retrieval-Augmented Generation (RAG) and Large Language Models (LLMs) to understand documents and provide context-aware answers to user queries.
 
@@ -83,4 +81,3 @@ An AI-powered PDF chatbot using Retrieval-Augmented Generation (RAG) and Large L
                  │      → write_chunks()   data/chunks/<doc>.jsonl   │
                  └───────────────────────────────────────────────────┘
 
->>>>>>> e17766c1bf53d946af2061331c8f7252df7932e2

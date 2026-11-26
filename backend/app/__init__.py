@@ -11,8 +11,8 @@ def create_app(config=None):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     app.config["UPLOAD_FOLDER"] = os.path.join(base_dir, "data", "uploads")
     app.config["CHUNKS_FOLDER"] = os.path.join(base_dir, "data", "chunks")
-    app.config["INGEST_SYNC"] = False  # True = read the PDF inside the upload request (used by tests)
-    app.config["MAX_CONTENT_LENGTH"] = 20 * 1024 * 1024  # 20 MB limit per upload
+    app.config["INGEST_SYNC"] = False  
+    app.config["MAX_CONTENT_LENGTH"] = 20 * 1024 * 1024 
 
     if config:
         app.config.update(config)

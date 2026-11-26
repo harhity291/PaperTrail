@@ -7,11 +7,6 @@ How a question gets answered:
                  the best few
   3. answer():   send those chunks + the question to the LLM, which answers
                  only from them and cites page numbers
-
-The LLM is any provider with an OpenAI-compatible /chat/completions endpoint
-(Groq, OpenAI, Ollama running locally, ...). It is set with environment
-variables, see backend/.env.example. With no LLM_MODEL set, answer() still
-works: it returns the best-matching passages instead of a written answer.
 """
 import json
 import math

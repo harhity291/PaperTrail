@@ -22,10 +22,10 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
-users = {}            # user_id -> user dict
-users_by_email = {}   # email -> user_id
-users_by_phone = {}   # phone -> user_id
-tokens = {}           # token -> user_id
+users = {}            
+users_by_email = {}   
+users_by_phone = {}   
+tokens = {}           
 
 EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 PHONE_PATTERN = re.compile(r"^\+?\d{8,15}$")   # e.g. +353871234567 or +919876543210

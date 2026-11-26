@@ -1,7 +1,9 @@
-// Dashboard page: upload PDFs, see your documents, ask questions about the selected one.
+/* Dashboard page: upload PDFs, see your documents, ask questions about the selected file. */
 
+/* Shorthand helper for looking up elements by ID */
 const $ = (id) => document.getElementById(id);
 
+/* Cache frequently accessed DOM elements for upload, document list, and chat UI */
 const dropzone = $("dropzone");
 const fileInput = $("file-input");
 const uploadMessage = $("upload-message");
@@ -12,30 +14,36 @@ const questionInput = $("question");
 const sendBtn = $("send-btn");
 const askTarget = $("ask-target");
 
-let jobs = [];                // the user's documents, from GET /jobs
-let selectedDocId = null;     // the document questions are asked about
-let pollTimer = null;
-const histories = {};         // doc_id -> [{ role, content, sources }]
+/* Client-side state for document jobs, active selection, polling timer, and per-document chat history */
+let jobs = [];                  /* the user's documents, from GET /jobs */
+let selectedDocId = null;       /* the document questions are asked about */
+let pollTimer = null;           /* Timeout handle used while documents are queued or processing */
+const histories = {};           /* Maps doc_id -> array of { role, content, sources } turns */
 
-// ---------- Start: only show the page to logged-in users ----------
+/* ---------- Start: only show the page to logged-in users ---------- */
 async function start() {
+  /* Enforce authentication before revealing dashboard UI */
   const user = await requireLogin();
   if (!user) return;
 
   $("app").hidden = false;
+  /* Populate user profile details, greeting, and localized current date */
   $("full-name").textContent = `${user.first_name} ${user.last_name}`;
   $("contact").textContent = user.email || user.phone || "";
   $("avatar").textContent = user.first_name.charAt(0);
   $("greeting").textContent = `${greetingForNow()}, ${user.first_name}`;
   $("today").textContent = new Date().toLocaleDateString("en-IE", { weekday: "long", day: "numeric", month: "long" });
 
+  /* Check backend health immediately and re-check every 10 seconds */
   updateServerPill();
   setInterval(updateServerPill, 10000);
+  /* Load documents and select the first available document if none is chosen yet */
   await loadDocuments();
   if (!selectedDocId && jobs.length) selectDocument(jobs[0].doc_id);
   else renderChat();
 }
 
+/* Returns a time-appropriate greeting based on the current local hour */
 function greetingForNow() {
   const hour = new Date().getHours();
   if (hour < 12) return "Good morning";
@@ -43,29 +51,33 @@ function greetingForNow() {
   return "Good evening";
 }
 
+/* Updates the server status badge styling and label */
 async function updateServerPill() {
   const online = await isBackendOnline();
   $("server-pill").className = `server-pill ${online ? "online" : "offline"}`;
   $("server-pill").querySelector(".label").textContent = online ? "Server online" : "Server offline";
 }
 
-// ---------- Log out ----------
+/* ---------- Log out ---------- */
 $("logout-btn").addEventListener("click", async () => {
+  /* Notify backend if reachable, then clear local token and return to landing page */
   try { await api("/auth/logout", { method: "POST" }); } catch (e) { /* ignore */ }
   setToken(null);
   window.location.href = "index.html";
 });
 
-// ---------- Upload (POST /upload) ----------
+/* ---------- Upload (POST /upload) ---------- */
 async function uploadFile(file) {
   if (!file) return;
+  /* Enforce PDF file type on the client before sending */
   if (file.type !== "application/pdf") {
     showUploadMessage("Please choose a PDF file.", "error");
     return;
   }
 
+  /* Package file in FormData for multipart upload */
   const formData = new FormData();
-  formData.append("file", file); // must match request.files["file"] in Flask
+  formData.append("file", file); /* Field name must match request.files["file"] in Flask */
 
   showUploadMessage(`Uploading ${file.name}…`);
   try {
@@ -75,6 +87,8 @@ async function uploadFile(file) {
       showUploadMessage(data.error || "Upload failed.", "error");
       return;
     }
+    
+    /* Select the newly uploaded document and refresh the job list */
     showUploadMessage(`${data.filename} uploaded. Reading it now…`, "success");
     selectedDocId = data.doc_id;
     await loadDocuments();
@@ -84,18 +98,21 @@ async function uploadFile(file) {
   }
 }
 
+/* Displays upload or document action status messages */
 function showUploadMessage(text, type = "") {
   uploadMessage.textContent = text;
   uploadMessage.className = `message ${type}`;
 }
 
+/* Handle file selection via the hidden file input, then reset input value so re-uploading works */
 fileInput.addEventListener("change", () => {
   uploadFile(fileInput.files[0]);
   fileInput.value = "";
 });
 
+/* Drag-and-drop event handlers for the dropzone */
 dropzone.addEventListener("dragover", (e) => {
-  e.preventDefault();
+  e.preventDefault();   /* Required to allow dropping files */
   dropzone.classList.add("dragover");
 });
 dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
@@ -105,8 +122,9 @@ dropzone.addEventListener("drop", (e) => {
   uploadFile(e.dataTransfer.files[0]);
 });
 
-// ---------- My documents (GET /jobs) ----------
+/* ---------- My documents (GET /jobs) ---------- */
 async function loadDocuments() {
+  /* Cancel any pending poll before starting a fresh fetch */
   clearTimeout(pollTimer);
   try {
     const res = await api("/jobs");
@@ -115,15 +133,16 @@ async function loadDocuments() {
     renderDocuments();
     updateSummary();
     updateAskState();
-    // While any document is still being read, check again shortly
+    /* While any document is still being read, check again shortly */
     if (jobs.some((job) => job.status === "queued" || job.status === "processing")) {
       pollTimer = setTimeout(loadDocuments, 1500);
     }
   } catch (err) {
-    // Server offline: keep what is shown
+      /* Keep existing UI state if server is temporarily unreachable */
   }
 }
 
+/* Renders the list of uploaded documents and attaches selection/keyboard/delete handlers */
 function renderDocuments() {
   docList.innerHTML = "";
   if (jobs.length === 0) {
@@ -133,10 +152,11 @@ function renderDocuments() {
   jobs.forEach((job) => {
     const li = document.createElement("li");
     li.className = "doc-item" + (job.doc_id === selectedDocId ? " selected" : "");
-    li.tabIndex = 0;
+    li.tabIndex = 0;  /* Makes list item focusable via keyboard */
     li.setAttribute("role", "button");
     const time = new Date(job.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     const pages = job.pages ? ` · ${job.pages} ${job.pages === 1 ? "page" : "pages"}` : "";
+    /* Escape dynamic strings with escapeHtml to prevent XSS */
     li.innerHTML = `
       <span class="doc-icon">PDF</span>
       <div class="doc-info">
@@ -147,10 +167,13 @@ function renderDocuments() {
       <span class="status ${job.status}">${job.status === "done" ? "ready" : job.status}</span>
       <button class="doc-delete" type="button" title="Delete document" aria-label="Delete ${escapeHtml(job.filename)}">×</button>
     `;
+    /* Select document on click */
     li.addEventListener("click", () => selectDocument(job.doc_id));
+    /* Allow selecting with Enter or Space when focused directly on the item */
     li.addEventListener("keydown", (e) => {
       if (e.target === li && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); selectDocument(job.doc_id); }
     });
+    /* Prevent delete click from bubbling up and selecting the document */
     li.querySelector(".doc-delete").addEventListener("click", (e) => {
       e.stopPropagation();
       deleteDocument(job);
@@ -159,6 +182,7 @@ function renderDocuments() {
   });
 }
 
+/* Updates top summary cards (total documents, total size, and active processing count) */
 function updateSummary() {
   const total = jobs.reduce((sum, job) => sum + (job.size_bytes || 0), 0);
   $("sum-docs").textContent = jobs.length;
@@ -166,6 +190,7 @@ function updateSummary() {
   $("sum-queued").textContent = jobs.filter((job) => job.status === "queued" || job.status === "processing").length;
 }
 
+/* Deletes a document on the backend and removes its local chat history */
 async function deleteDocument(job) {
   if (!confirm(`Delete "${job.filename}" and its chat?`)) return;
   try {
@@ -178,15 +203,19 @@ async function deleteDocument(job) {
   if (selectedDocId === job.doc_id) selectedDocId = null;
   showUploadMessage(`${job.filename} deleted.`, "success");
   await loadDocuments();
+  /* Select another document if available, otherwise reset chat view */
   if (!selectedDocId && jobs.length) selectDocument(jobs[0].doc_id);
   else renderChat();
 }
 
-// ---------- Choosing which document to ask about ----------
+/* ---------- Choosing which document to ask about ---------- */
+
+/* Returns the job object matching selectedDocId, or null */
 function selectedJob() {
   return jobs.find((job) => job.doc_id === selectedDocId) || null;
 }
 
+/* Sets the active document, refreshes UI, and focuses the question input if ready */
 function selectDocument(docId) {
   selectedDocId = docId;
   renderDocuments();
@@ -194,7 +223,7 @@ function selectDocument(docId) {
   if (!questionInput.disabled) questionInput.focus();
 }
 
-// Updates the "Asking about…" line and enables or disables the question box
+/* Updates the "Asking about…" line and enables or disables the question box */
 function updateAskState() {
   const job = selectedJob();
   const ready = job && job.status === "done";
@@ -215,6 +244,7 @@ function updateAskState() {
   }
 }
 
+/* Renders chat bubbles for the currently selected document */
 function renderChat() {
   updateAskState();
   chatLog.innerHTML = "";
@@ -232,7 +262,7 @@ function renderChat() {
   history.forEach((turn) => addBubble(turn.content, turn.role === "user" ? "user" : "bot", turn.sources));
 }
 
-// ---------- Ask a question (POST /ask) ----------
+/* ---------- Ask a question (POST /ask) ---------- */
 askForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const question = questionInput.value.trim();
@@ -241,10 +271,13 @@ askForm.addEventListener("submit", async (e) => {
 
   const docId = job.doc_id;
   const history = histories[docId] = histories[docId] || [];
+  /* Send prior conversation turns without source metadata to the backend */
   const past = history.map(({ role, content }) => ({ role, content }));
 
   if (history.length === 0) chatLog.innerHTML = "";
   addBubble(question, "user");
+  
+  /* Lock input while waiting for the response and show a temporary pending bubble */
   questionInput.value = "";
   questionInput.disabled = sendBtn.disabled = true;
   const pending = addBubble("Reading the document…", "bot pending");
@@ -253,6 +286,7 @@ askForm.addEventListener("submit", async (e) => {
     const { res, data } = await postJson("/ask", { doc_id: docId, question, history: past });
     pending.remove();
     if (!res.ok) {
+      /* Only append to visible log if the user hasn't switched documents meanwhile */
       if (selectedDocId === docId) addBubble(data.error || "Something went wrong.", "bot error");
     } else {
       history.push({ role: "user", content: question }, { role: "assistant", content: data.answer, sources: data.sources });
@@ -266,13 +300,16 @@ askForm.addEventListener("submit", async (e) => {
   if (!questionInput.disabled) questionInput.focus();
 });
 
+/* Appends a message bubble (and optional collapsible source passages) to the chat log */
 function addBubble(text, who, sources) {
   const div = document.createElement("div");
   div.className = `bubble ${who}`;
   div.textContent = text;
+  /* Render expandable source citations if returned with the answer */
   if (sources && sources.length) {
     const details = document.createElement("details");
     details.className = "sources";
+    /* Deduplicate page numbers for the summary header */
     const pages = [...new Set(sources.map((s) => s.page))].join(", ");
     const summary = document.createElement("summary");
     summary.textContent = `Passages used (pages ${pages})`;
@@ -288,8 +325,10 @@ function addBubble(text, who, sources) {
     div.appendChild(details);
   }
   chatLog.appendChild(div);
+  /* Auto-scroll to the newest message */
   chatLog.scrollTop = chatLog.scrollHeight;
   return div;
 }
 
+/* Initialize the dashboard on script load */
 start();

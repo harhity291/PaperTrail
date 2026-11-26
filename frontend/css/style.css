@@ -1,8 +1,10 @@
 /* =========================================================
    PaperTrail – shared styles
    ========================================================= */
+/* :root contains global CSS custom properties (variables) 
+   used for consistent colors, opacity levels, and themes across the app. */
 :root {
-  /* Palette: sage #66856E, tan #BDA78E, sand #E4D9C5, linen #F4F5EF */
+  /* Main Palette: sage #66856E, tan #BDA78E, sand #E4D9C5, linen #F4F5EF */
   --bg: #f4f5ef;
   --bg-gradient: linear-gradient(165deg, #f4f5ef 0%, #efede4 55%, #e9e1d1 100%);
   --bg-soft: rgba(228, 217, 197, 0.3);
@@ -13,37 +15,44 @@
   --text-soft: #3a473e;
   --muted: #56635a;
 
-  --sage: #66856e;          /* main colour */
+   /* Accent & Functional Colors */
+  --sage: #66856e;          /* main theme colour */
   --sage-btn: #5e7d66;      /* a touch deeper so white button text stays readable */
   --sage-deep: #4a6853;     /* sage for small text and links */
   --sage-soft: rgba(102, 133, 110, 0.13);
   --sage-glow: rgba(102, 133, 110, 0.26);
   --tan: #bda78e;           /* second colour */
-  --tan-deep: #7d6549;      /* tan for small text */
+  --tan-deep: #7d6549;      /* tan for small high contrast text */
   --tan-soft: rgba(189, 167, 142, 0.24);
   --sand: #e4d9c5;
-  --danger: #a8432f;
+  --danger: #a8432f;        /* Color for error states and destructive actions */
 }
 
+/* Universal box-sizing ensures padding and border are included in total width/height */
 * { box-sizing: border-box; }
+/* Forces elements with the [hidden] attribute to remain hidden regardless of display type */
 [hidden] { display: none !important; }
-
+/* Base html background styling */
 html { background: var(--bg); }
 
+/* Body base layout, typography, and viewport height setup */
 body {
   margin: 0;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: var(--bg-gradient);
   color: var(--text);
-  line-height: 1.5;
-  min-height: 100vh;
+  line-height: 1.5;         /* Controls distance between lines of text */
+  min-height: 100vh;        /* Guarantees body spans at least full viewport height */
 }
-a { color: inherit; }
+/* Base element resets and shared utility classes */
+a { color: inherit; }      /* Inherits parent text color for links */
 h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
+/* Standard icon styling for inline SVG elements */
 .icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 .accent { color: var(--sage-deep); }
 
-/* ---------- Brand ---------- */
+/* ---------- Brand Componemts ---------- */
+/* Inline-flex aligns mark and text horizontally in one line */
 .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
 .brand-mark { display: block; width: 40px; height: 40px; flex-shrink: 0; }
 .brand-name { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
@@ -53,23 +62,31 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   padding: 12px 22px; border-radius: 10px; border: 1px solid transparent;
   font: 600 15px "Inter", sans-serif; text-decoration: none; cursor: pointer;
+   /* Smooth transition for hover effects */
   transition: transform 0.15s, background 0.15s, border-color 0.15s, color 0.15s;
 }
+   /* Subtle lift effect on button hover */
 .btn:hover { transform: translateY(-1px); }
+   /* Primary Button Styling */
 .btn-primary { background: var(--sage-btn); color: #fff; }
 .btn-primary:hover { background: var(--sage-deep); }
+   /* Ghost/Outlined Button Styling */
 .btn-ghost { background: transparent; border-color: var(--border); color: var(--text); }
 .btn-ghost:hover { border-color: var(--sage); color: var(--sage-deep); }
+   /* Compact button modifier */
 .btn-small { padding: 8px 14px; font-size: 14px; }
 .btn:disabled { opacity: 0.6; cursor: wait; transform: none; }
 
+   /* Status and feedback messages */
 .message { min-height: 20px; margin: 0; font-size: 13px; }
 .message.error { color: var(--danger); }
 .message.success { color: var(--sage-deep); }
 
 /* =========================================================
-   Home page
+   Home page Layout & Components
    ========================================================= */
+
+   /* Header layout using Flexbox space-between */
 .site-header {
   display: flex; align-items: center; justify-content: space-between;
   max-width: 1180px; margin: 0 auto; padding: 22px 24px;
@@ -78,29 +95,35 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
 .header-links .plain-link { color: var(--muted); text-decoration: none; font-weight: 500; padding: 8px 12px; }
 .header-links .plain-link:hover { color: var(--text); }
 
+   /* Hero Section: 2-column asymmetric Grid layout */
 .hero {
   display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center;
   max-width: 1180px; margin: 0 auto; padding: 56px 24px 72px;
 }
+   /* Sub-heading decorator with pseudo-element line */
 .eyebrow {
   display: inline-flex; align-items: center; gap: 10px;
   color: var(--sage-deep); font-size: 14px; font-weight: 600;
 }
+   /* Creates small accent line before the eyebrow text */
 .eyebrow::before { content: ""; width: 28px; height: 2px; background: var(--tan); }
 .hero h1 { font-size: 62px; line-height: 1.05; letter-spacing: -0.03em; margin: 18px 0 20px; }
 .hero h1 span { color: var(--sage); }
 .hero-text { color: var(--muted); font-size: 18px; max-width: 520px; margin: 0 0 30px; }
 .hero-buttons { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+   /* Feature check-list styling */
 .check-list { list-style: none; padding: 0; margin: 34px 0 0; display: grid; gap: 10px; }
 .check-list li { display: flex; align-items: center; gap: 10px; color: var(--text-soft); font-size: 15px; }
 .check-list .icon { color: var(--sage); width: 18px; height: 18px; }
 
-/* Animated logo in the hero */
+/* Animated logo in the hero graphic */
 .hero-logo { display: grid; place-items: center; }
 .hero-logo svg { width: 100%; max-width: 440px; height: auto; overflow: visible; }
+/* SVG element transformations and rotational origins */
 .hl-ghost { fill: rgba(228, 217, 197, 0.75); stroke: rgba(189, 167, 142, 0.8); stroke-width: 0.6; transform-origin: 60px 60px; }
 .hl-ghost-1 { transform: rotate(-11deg) translate(-4px, 2px); }
 .hl-ghost-2 { transform: rotate(8deg) translate(5px, -1px); opacity: 0.7; }
+/* Applying animation keyframes */
 .hl-float { animation: hl-float 6s ease-in-out infinite; filter: drop-shadow(0 6px 10px rgba(52, 64, 54, 0.22)); }
 .hl-orbit { transform-origin: 60px 60px; animation: hl-spin 48s linear infinite; }
 .hl-trail { animation: hl-march 1.4s linear infinite; }
@@ -108,6 +131,7 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
 .hl-pulse { transform-box: fill-box; transform-origin: center; animation: hl-pulse 3.2s ease-out infinite; }
 .hl-spark { transform-box: fill-box; transform-origin: center; animation: hl-twinkle 3s ease-in-out infinite; }
 .hl-spark-2 { animation-delay: 1.5s; }
+/* Keyframe definitions for animated graphics */
 @keyframes hl-float { 50% { transform: translateY(-3px); } }
 @keyframes hl-spin { to { transform: rotate(360deg); } }
 @keyframes hl-march { to { stroke-dashoffset: -3.9; } }
@@ -115,16 +139,20 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
 @keyframes hl-pulse { 0%, 55% { transform: scale(1); opacity: 0; } 70% { opacity: 0.9; } 100% { transform: scale(2.2); opacity: 0; } }
 @keyframes hl-twinkle { 0%, 100% { transform: scale(0.6) rotate(0deg); opacity: 0.35; } 50% { transform: scale(1.1) rotate(45deg); opacity: 1; } }
 
-/* How it works */
+/* How it works Timeline Section */
 .how { max-width: 1180px; margin: 0 auto; padding: 40px 24px 72px; }
 .how h2 { font-size: 34px; margin: 0 0 8px; }
 .how > p { color: var(--muted); margin: 0 0 36px; }
+/* Grid container for timeline steps */
 .timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; position: relative; }
+/* Linear timeline connection line drawn using an absolute pseudo-element */
 .timeline::before {
   content: ""; position: absolute; top: 22px; left: 22px; right: 33%;
   height: 2px; background: linear-gradient(90deg, var(--sage), var(--tan));
 }
 .t-step { position: relative; padding-right: 32px; }
+
+/* Circle container for step numbers */
 .t-dot {
   display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
   background: var(--bg); border: 2px solid var(--sage); color: var(--sage-deep);
@@ -133,6 +161,7 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
 .t-step h3 { font-size: 20px; margin: 18px 0 6px; }
 .t-step p { color: var(--muted); margin: 0; }
 
+/* Callout banner block */
 .project-band {
   max-width: 1132px; margin: 0 auto 64px; padding: 32px 36px; border-radius: 18px;
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
@@ -148,10 +177,13 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
 }
 
 /* =========================================================
-   Dashboard
+   Dashboard Main App Layout
    ========================================================= */
+
+/* Two-column layout: Fixed width sidebar + flexible content main area */
 .app { display: grid; grid-template-columns: 250px 1fr; min-height: 100vh; }
 
+/* Sticky Left Navigation Sidebar */
 .sidebar {
   display: flex; flex-direction: column; gap: 28px;
   padding: 24px 18px; background: var(--bg-soft); border-right: 1px solid var(--border);
@@ -165,20 +197,28 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
 .side-nav a:hover { background: var(--surface); color: var(--text); }
 .side-nav a.active { background: var(--sage-soft); color: var(--sage-deep); }
 
+/* Sidebar user profile block pushed to bottom via margin-top: auto */
 .side-user { margin-top: auto; padding: 14px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); }
 .side-user .who { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+
+/* Circular user avatar initials */
 .avatar {
   display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%;
   background: var(--tan); color: var(--text); font-weight: 700; text-transform: uppercase;
 }
 .who strong { display: block; font-size: 14px; }
+
+/* Truncates long email addresses with an ellipsis (...) */
 .who small { display: block; color: var(--muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 150px; }
 .side-user .btn { width: 100%; }
 
+/* Main Content Area */
 .main { padding: 34px 40px; max-width: 1200px; }
 .main-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 26px; }
 .main-head h1 { font-size: 34px; margin: 0; letter-spacing: -0.02em; }
 .main-head p { margin: 4px 0 0; color: var(--muted); }
+
+/* Server status pill indicator */
 .server-pill {
   display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px;
   background: var(--surface); border: 1px solid var(--border); font-size: 13px; color: var(--muted);
@@ -187,16 +227,19 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
 .server-pill.online .dot { background: var(--sage); }
 .server-pill.offline .dot { background: var(--danger); }
 
+/* Top metrics dashboard cards */
 .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
 .summary-card { padding: 18px 20px; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); }
 .summary-card span { color: var(--muted); font-size: 13px; }
 .summary-card strong { display: block; font: 700 28px "Space Grotesk", sans-serif; margin-top: 4px; }
 
+/* Dashboard main workspace split layout */
 .work { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .card { padding: 22px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); }
 .card h2 { display: flex; align-items: center; gap: 10px; font-size: 18px; margin: 0 0 16px; }
 .card h2 .icon { color: var(--sage); }
 
+/* File Drag & Drop Upload Zone */
 .dropzone {
   display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
   padding: 30px 16px; border-radius: 12px; cursor: pointer;
@@ -205,15 +248,20 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
 }
 .dropzone .icon { width: 30px; height: 30px; color: var(--sage); }
 .dropzone span { color: var(--muted); font-size: 13px; }
+
+/* State when dragging a file over the drop zone */
 .dropzone:hover, .dropzone.dragover { border-color: var(--sage); background: var(--sage-soft); }
 #upload-message { margin-top: 10px; }
 
+/* Document List Styling */
 .doc-list { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .doc-list li {
   display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px;
   background: var(--bg-soft); border: 1px solid var(--border);
 }
 .doc-list li.empty { justify-content: center; color: var(--muted); border-style: dashed; }
+
+/* Small document type icon badge */
 .doc-icon {
   display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px;
   background: var(--tan-soft); color: var(--tan-deep); font-size: 10px; font-weight: 700; flex-shrink: 0;
@@ -221,14 +269,23 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
 .doc-info { flex: 1; min-width: 0; }
 .doc-info strong { display: block; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .doc-info small { color: var(--muted); font-size: 12px; }
+
+/* General Pill Status Tags */
 .status { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--tan-soft); color: var(--tan-deep); text-transform: capitalize; }
 
+/* Interactive Chat Card */
 .ask-card { display: flex; flex-direction: column; min-height: 470px; }
+
+/* Scrollable Chat Area */
 .chat-log { flex: 1; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; max-height: 380px; padding-bottom: 12px; }
+/* Chat Message Bubbles */
 .bubble { max-width: 85%; padding: 11px 15px; border-radius: 14px; font-size: 14px; }
+/* Bot response alignment and styling */
 .bubble.bot { align-self: flex-start; background: var(--surface-2); border-bottom-left-radius: 4px; }
+/* User query alignment and styling */
 .bubble.user { align-self: flex-end; background: var(--sage-btn); color: #fff; font-weight: 500; border-bottom-right-radius: 4px; }
 .bubble em { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+/* Chat Input Bar */
 .ask-form { display: flex; gap: 10px; }
 .ask-form input {
   flex: 1; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border);
@@ -239,6 +296,8 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
 /* =========================================================
    Login & registration pages
    ========================================================= */
+
+/* Auth container with layered radial gradients & repeating CSS grid lines */
 .auth-page {
   min-height: 100vh; display: flex; flex-direction: column;
   background:
@@ -252,6 +311,8 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
 .back-link:hover { color: var(--sage-deep); }
 
 .auth-main { flex: 1; display: grid; place-items: center; padding: 20px 16px 48px; }
+
+/* Centered Form Card with box-shadow depth glow */
 .auth-card {
   position: relative; width: 100%; max-width: 440px; padding: 36px 32px 28px; border-radius: 18px;
   background: linear-gradient(180deg, #ffffff, #f8f6ef);
@@ -261,6 +322,8 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
   animation: rise 0.35s ease;
 }
 .auth-card.wide { max-width: 500px; }
+
+/* Dismiss / Close button */
 .auth-close {
   position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border-radius: 8px;
   display: grid; place-items: center; color: var(--text); text-decoration: none; font-size: 18px;
@@ -279,6 +342,7 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
 .auth-title span { color: var(--sage); }
 .auth-sub { margin: 0 0 26px; color: var(--muted); font-size: 15px; }
 
+/* Form inputs & grid controls */
 .auth-form { display: flex; flex-direction: column; gap: 16px; text-align: left; }
 .auth-form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .auth-form label { display: flex; flex-direction: column; gap: 7px; font-size: 14px; font-weight: 600; color: var(--text); }
@@ -289,17 +353,20 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .auth-form input::placeholder { color: #7c877f; }
+/* Custom Focus Ring Indicator for Accessibility */
 .auth-form input:focus { outline: none; border-color: var(--sage); box-shadow: 0 0 0 3px var(--sage-soft); }
 .hint { font-size: 12px; font-weight: 400; color: var(--muted); }
 
+/* Password field wrapper with absolutely positioned show/hide toggle */
 .pw-wrap { position: relative; display: block; }
-.pw-wrap input { padding-right: 46px; }
+.pw-wrap input { padding-right: 46px; }    /* Extra right padding so text doesn't overlap eye toggle icon */
 .pw-toggle {
-  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);   /* Vertically centers the icon button */
   display: grid; place-items: center; border: none; background: none; color: var(--muted); cursor: pointer;
 }
 .pw-toggle:hover { color: var(--sage-deep); }
 
+/* Main CTA submit button */
 .auth-submit {
   width: 100%; padding: 15px; margin-top: 4px; border: none; border-radius: 10px;
   background: linear-gradient(135deg, var(--sage-btn), var(--sage-deep)); color: #fff;
@@ -312,20 +379,26 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
 .auth-switch a { color: var(--sage-deep); font-weight: 600; text-decoration: none; }
 .auth-switch a:hover { text-decoration: underline; }
 
+/* Rise keyframe animation for auth modal entry */
 @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+/* Accessibility: Disables complex animations if user has requested reduced motion in their OS */
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 
 /* =========================================================
-   Small screens
+   Small screens, Responsive Layout (Media Queries)
    ========================================================= */
+
+/* Tablet & Mobile Screens (Up to 960px width) */
 @media (max-width: 960px) {
+   /* Stack grid layouts to a single column */
   .hero { grid-template-columns: 1fr; gap: 24px; }
   .hero h1 { font-size: 46px; }
   .hero-logo svg { max-width: 280px; }
   .timeline { grid-template-columns: 1fr; gap: 28px; }
-  .timeline::before { display: none; }
+  .timeline::before { display: none; }    /* Hide timeline horizontal line on mobile */
   .project-band { flex-direction: column; align-items: flex-start; margin: 0 16px 48px; }
 
+   /* Re-orient sidebar to top horizontal navbar for smaller screens */
   .app { grid-template-columns: 1fr; }
   .sidebar { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px; }
   .side-nav { flex-direction: row; }
@@ -335,32 +408,41 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
   .main { padding: 24px 16px; }
   .work, .summary { grid-template-columns: 1fr; }
 }
+/* Small Smartphone Devices (Up to 520px width) */
 @media (max-width: 520px) {
   .auth-form .row { grid-template-columns: 1fr; }
-  .who small { display: none; }
+  .who small { display: none; }    /* Hides user email on very small devices */
 }
 
 /* =========================================================
    Document chat (select a document, read answers)
    ========================================================= */
+
+/* Document list item interactions */
 .doc-list li.doc-item { cursor: pointer; transition: border-color 0.15s, background 0.15s; }
 .doc-list li.doc-item:hover { border-color: var(--sage); }
+/* Focus styles for keyboard accessibility navigation */
 .doc-list li.doc-item:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; }
 .doc-list li.doc-item.selected { border-color: var(--sage); background: var(--sage-soft); }
 .doc-error { display: block; color: var(--danger) !important; margin-top: 2px; white-space: normal; }
+/* Contextual processing status colors */
 .status.processing, .status.queued { background: var(--tan-soft); color: var(--tan-deep); }
 .status.done { background: var(--sage-soft); color: var(--sage-deep); }
 .status.failed { background: rgba(168, 67, 47, 0.12); color: var(--danger); }
+/* Delete document button */
 .doc-delete {
   border: none; background: none; color: var(--muted); font-size: 20px; line-height: 1;
   cursor: pointer; padding: 2px 8px; border-radius: 6px;
 }
 .doc-delete:hover, .doc-delete:focus-visible { color: var(--danger); }
 
+/* Selected chat target text header */
 .ask-target { margin: -6px 0 12px; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Preserves line breaks in bot text responses */
 .bubble.bot { white-space: pre-wrap; }
 .bubble.pending { color: var(--muted); }
 .bubble.error { color: var(--danger); }
+/* Collapsible Source Citation Block using HTML <details> */
 .bubble details.sources { margin-top: 10px; font-size: 12px; color: var(--text-soft); white-space: normal; }
 .bubble details.sources summary { cursor: pointer; }
 .bubble details.sources div {
@@ -368,4 +450,5 @@ h1, h2, h3, .brand-name { font-family: "Space Grotesk", "Inter", sans-serif; }
   background: var(--bg-soft); border-radius: 0 6px 6px 0; white-space: pre-wrap;
 }
 .bubble details.sources div strong { display: block; color: var(--text); margin-bottom: 2px; }
+/* Disabled states for form inputs and buttons while submitting */
 .ask-form input:disabled, .ask-form .btn:disabled { opacity: 0.55; cursor: not-allowed; }
